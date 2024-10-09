@@ -24,6 +24,12 @@ let items = [
  * 
  */
 
+// exercicio 5
+app.get('/item/count', (req, res) => {
+    const count = items.length;
+    res.json({ count }); 
+});
+
 app.get('/item', (req, res) => {
     res.status(200).json(items);
 });
@@ -60,6 +66,35 @@ app.post('/item', (req, res) => {
 
 });
 
+// exercicio 3
+app.patch('/item/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const { name } = req.body;
+
+    if (typeof name !== 'string') {
+        return res.status(400).json({ message: 'O campo name deve ser uma string' });
+    }
+
+    const item = items.find(item => item.id == id);
+    
+    if (item) {
+        item.name = name;
+        return res.status(200).json(item);
+    } else {
+        return res.status(404).json({ message: 'Item não encontrado' });
+    }
+});
+
+// exercicio 4 
+app.delete('/item', (req, res) => {
+    items = [];
+    res.status(200).json({message: "Tudo foi removido"})
+})
+
+app.listen(port, () => {
+    console.log(`O servidor está rodando em http://localhost:${port}`);
+})
+
 //vamos passar como parametro na chamada o id do objeto que irá ser excluido
 app.delete('/item/:id', (req, res) => {
     const id = parseInt(req.params.id);
@@ -88,3 +123,4 @@ app.put('/item/:id', (req, res) => {
 app.listen(port, () => {
     console.log(`O servidor está rodando em http://localhost:${port}`);
 })
+
